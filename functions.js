@@ -21,13 +21,64 @@ function reverseString(string) {
  */
 function casesarCipher(toEncrypt, shift) {
     //only alphabetical/whitespace characters,
-    const chars = toEncrypt.split("");
-    const re = new RegExp("^([a-zA-Z]|\s)*$")
-    if (!re.test(toEncrypt)) 
-        throw new Error("Alphabetical strings only");
-    console.log(chars.map((x) => String.fromCharCode(x.charCodeAt(0) + shift % 26)))
-    return chars.map((x) => String.fromCharCode(x.charCodeAt(0) + shift % 26)).join("");
+    let words = toEncrypt.split(/(\s+)/);
+    words = words.map(x => shiftWord(x, shift));
+    const shifted = words.join("");
+    return shifted;
 
 }
 
-export {capitalize, reverseString, casesarCipher};
+/**
+ * Check if a character is alphabetical
+ * @param {Character} char character to be checked 
+ * @returns true if char is alphabetical, false otherwise
+ */
+function isAlphabetical(char) {
+    const lowercase = char.charCodeAt(0) >= 97 && char.charCodeAt(0) <= 122;
+    const uppercase = char.charCodeAt(0) >= 65 && char.charCodeAt(0) <= 90;
+    return uppercase || lowercase;
+}
+
+/**
+ * Takes a word and shifts it according to the casesar cipher
+ * @param {String} word 
+ * @param {Integer} shift 
+ * @returns shifted word
+ */
+function shiftWord(word, shift) { 
+    const chars = word.split("");
+    const shifted = chars.map((x) => {
+        if (!isAlphabetical(x))
+            return x;
+
+        const start = x.toLowerCase() === x ? 96 : 64;  
+        const end = x.toLowerCase() === x ? 122 : 90;  
+        let ascii = 0;
+        ascii = (x.charCodeAt(0) + shift) % end
+        if (x.charCodeAt(0) + shift > end)
+            ascii += start 
+        else if (x.charCodeAt(0) + shift === end)
+            ascii += end 
+        return String.fromCharCode(ascii)
+        }).join("");
+    return shifted;
+}
+
+/**
+ * Function to return a JSON of arr statistics
+ * @param {*} arr 
+ * @returns average, min, max, length of array
+ */
+function analyzeArray(arr) {
+    const avg = arr.reduce((prev, curr) => prev + curr) / arr.length;
+    const max = arr.reduce((prev, curr) => Math.max(prev, curr));
+    const min = arr.reduce((prev, curr) => Math.min(prev, curr));
+    return {
+        average: avg,
+        min: min,
+        max: max,
+        length: arr.length,
+    }
+}
+
+export {capitalize, reverseString, casesarCipher, analyzeArray};

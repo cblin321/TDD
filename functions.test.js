@@ -1,5 +1,5 @@
 import {describe, expect, test} from '@jest/globals';
-import { capitalize, reverseString, casesarCipher } from './functions';
+import { capitalize, reverseString, casesarCipher, analyzeArray } from './functions';
 
 describe("Capitalize fcn", () => {
     test("exists", () => expect(capitalize).toBeTruthy());
@@ -23,6 +23,19 @@ describe("Reverse String fcn", () => {
 
 describe("Caesar cipher fcn", () => {
     test("exists", () => expect(casesarCipher).toBeTruthy());
-    test("non-alphabetical", () => expect(() => casesarCipher("fdjsaio;123", 10)).toThrow(Error));
-    test("non-alphabetical", () => expect(() => casesarCipher("xyz", 3)).toBe("abc"));
+    // test("non-alphabetical", () => expect(() => casesarCipher("fdjsaio;123", 10)).toThrow(Error));
+    test("alphabetical, lowercase, no spaces", () => expect(casesarCipher("xyz", 3)).toBe("abc"));
+    test("alphabetical, mixed case, no spaces", () => expect(casesarCipher('HeLLo', 3)).toBe("KhOOr"));
+    test("alphabetical, mixed case, no spaces", () => expect(casesarCipher('World', 3)).toBe("Zruog"));
+    test("alphabetical, mixed case, punctuation, spaces", () => expect(casesarCipher('Hello, World!', 3)).toBe("Khoor, Zruog!"));
+});
+
+describe("analyzeArray", () => {
+    test("exists", () => expect(casesarCipher).toBeTruthy());
+    test("general case", () => expect(analyzeArray([1,8,3,4,2,6])).toEqual({
+        average: 4,
+        min: 1,
+        max: 8,
+        length: 6
+     }))
 });
